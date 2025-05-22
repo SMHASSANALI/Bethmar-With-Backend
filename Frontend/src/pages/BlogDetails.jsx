@@ -34,7 +34,7 @@ const BlogDetails = () => {
                         </div>
                     </div>
 
-                    <div className="flex-shrink-0">
+                    <div className="flex-shrink-0 mx-auto">
                         <img
                             src={state.image}
                             alt="Blog visual"
