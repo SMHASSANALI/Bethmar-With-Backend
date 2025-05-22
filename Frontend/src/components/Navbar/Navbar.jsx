@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import bethmarLogo from '../../assets/Logo/bethmar.png';
-import { Link as ScrollLink } from 'react-scroll';
+import { scroller } from 'react-scroll';
 import ContactForm from '../ContactForm/ContactForm';
 import { IoMdClose, IoMdMenu } from 'react-icons/io';
 import jCoffey from '../../assets/Logo/JCoffeylogo.jpg'
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
     const [formVisible, setFormVisible] = useState(false);
@@ -16,6 +16,28 @@ const Navbar = () => {
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
+    };
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const handleScroll = (target) => {
+        if (location.pathname !== '/') {
+            navigate('/', { replace: false });
+            setTimeout(() => {
+                scroller.scrollTo(target, {
+                    duration: 800,
+                    delay: 0,
+                    smooth: 'easeInOutQuart',
+                });
+            }, 100); // Delay to ensure DOM has loaded
+        } else {
+            scroller.scrollTo(target, {
+                duration: 800,
+                delay: 0,
+                smooth: 'easeInOutQuart',
+            });
+        }
     };
 
     return (
@@ -49,44 +71,23 @@ const Navbar = () => {
             </section>
 
             <div className='flex flex-row items-center justify-between mx-auto max-w-[1500px] py-1 px-4'>
-                <ScrollLink
-                    to='Banner'
-                    smooth={true}
-                    duration={500}
+                <Link
+                    to='/'
                     className='cursor-pointer'
                 >
                     <div className='h-auto w-24 md:w-36 flex justify-center items-center py-1'>
                         <img src={bethmarLogo} alt="Bethmar Logo" className='w-full h-auto' />
                     </div>
-                </ScrollLink>
+                </Link>
                 <div className='hidden md:flex ml-auto px-[16px] md:px-[32px] items-center gap-4 md:gap-8 font-poppins text-sm md:text-base'>
-                    <ScrollLink
-                        to='About'
-                        smooth={true}
-                        duration={500}
-                        className='cursor-pointer'
-                    >
-                        About
-                    </ScrollLink>
-                    <ScrollLink
-                        to='Services'
-                        smooth={true}
-                        duration={500}
-                        className='cursor-pointer'
-                    >
-                        Services
-                    </ScrollLink>
+                    <span onClick={() => handleScroll('About')} className='cursor-pointer'>About</span>
+                    <span onClick={() => handleScroll('Services')} className='cursor-pointer'>Services</span>
+                    <Link to="/blog" className='cursor-pointer'>
+                        Blog
+                    </Link>
                 </div>
                 <div className='hidden md:flex'>
-                    <ScrollLink
-                        onClick={handleClick}
-                        to='Footer'
-                        smooth={true}
-                        duration={500}
-                        className='cursor-pointer'
-                    >
-                        Contact Us
-                    </ScrollLink>
+                    <span onClick={() => handleClick()} className='cursor-pointer'>Contact Us</span>
                 </div>
                 <div className="md:hidden">
                     <button
@@ -104,33 +105,9 @@ const Navbar = () => {
             {
                 menuOpen && (
                     <div className="md:hidden flex flex-col items-start gap-4 mt-4 font-poppins text-sm rounded-lg py-2 px-4">
-                        <ScrollLink
-                            to='About'
-                            smooth={true}
-                            duration={500}
-                            className='cursor-pointer border-b border-slate-500 w-full'
-                            onClick={toggleMenu}
-                        >
-                            About
-                        </ScrollLink>
-                        <ScrollLink
-                            to='Services'
-                            smooth={true}
-                            duration={500}
-                            className='cursor-pointer border-b border-slate-500 w-full'
-                            onClick={toggleMenu}
-                        >
-                            Services
-                        </ScrollLink>
-                        <ScrollLink
-                            onClick={handleClick}
-                            to='Footer'
-                            smooth={true}
-                            duration={500}
-                            className='cursor-pointer'
-                        >
-                            Contact
-                        </ScrollLink>
+                        <span onClick={() => handleScroll('About')} className='cursor-pointer border-b border-slate-500 w-full'>About</span>
+                        <span onClick={() => handleScroll('Services')} className='cursor-pointer border-b border-slate-500 w-full'>Services</span>
+                        <span onClick={() => handleClick()} className='cursor-pointer border-b border-slate-500 w-full'>Contact Us</span>
                     </div>
                 )
             }

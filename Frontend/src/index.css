@@ -84,6 +84,13 @@ body {
   animation: gradient-animation 15s ease-in-out infinite;
   animation-delay: 2.5s;
 }
+
+.custom-line {
+  height: 5px;
+  background-color: rgb(250, 250, 250);
+  margin: 20px 0;
+}
+
 @keyframes gradient-animation {
   0% {
     background-position: 0% 0%;

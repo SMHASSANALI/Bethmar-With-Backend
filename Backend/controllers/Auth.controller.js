@@ -1,5 +1,6 @@
 const USER = require("../modals/User.schema.js");
 const generateTokenAndSetCookie = require("../utils/generateToken.js");
+const bcrypt = require("bcrypt");
 
 const SALT_ROUNDS = parseInt(process.env.SALT) || 10;
 const PEPPER = process.env.PEPPER || 'default_pepper';
