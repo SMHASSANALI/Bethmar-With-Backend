@@ -85,6 +85,9 @@ const Navbar = () => {
                     <Link to="/blog" className='cursor-pointer'>
                         Blog
                     </Link>
+                    <Link to="/careers" className='cursor-pointer'>
+                        Careers
+                    </Link>
                 </div>
                 <div className='hidden md:flex'>
                     <span onClick={() => handleClick()} className='cursor-pointer'>Contact Us</span>

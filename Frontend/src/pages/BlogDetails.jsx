@@ -1,7 +1,5 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import Navbar from '../components/Navbar/Navbar';
-import Footer from '../components/Footer/Footer';
 import Seprator from '../components/Seprator/Seprator';
 
 const BlogDetails = () => {
@@ -10,9 +8,6 @@ const BlogDetails = () => {
 
     return (
         <div className='bg-[#f9f9f9]'>
-            <div className='relative'>
-                <Navbar />
-            </div>
             <div className="max-w-6xl mx-auto px-4 py-8 font-sans bg-[#f6f8f7]">
                 <div className="flex flex-col md:flex-row gap-8">
                     <div className="flex-1 flex flex-col">
@@ -26,10 +21,13 @@ const BlogDetails = () => {
                                 Written by: <span className="text-blue-600 font-medium">BethMar</span>
                             </p>
                             <p>
-                                Published: {new Date(state.date).toLocaleDateString()}
+                                Category: <span className="text-blue-600 font-medium">{state.category}</span>
+                            </p>
+                            <p>
+                                Published: {new Date(state.createdAt).toLocaleDateString()}
                                 {' | '}
                                 <span className="text-gray-700">Updated:</span>{' '}
-                                {new Date(state.date).toLocaleDateString()}
+                                {new Date(state.updatedAt).toLocaleDateString()}
                             </p>
                         </div>
                     </div>
@@ -50,7 +48,6 @@ const BlogDetails = () => {
                     dangerouslySetInnerHTML={{ __html: contentWithLines }}
                 />
             </div>
-            <Footer />
         </div>
     );
 };
