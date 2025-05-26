@@ -50,13 +50,13 @@ const Careers = () => {
     }
 
     return (
-        <div className="px-4 md:px-20 py-16 bg-white text-gray-800">
-            <div className="mb-8">
-                <span className="text-sm bg-gray-200 text-gray-600 px-3 py-1 rounded-full inline-block mb-2">
+        <div className="px-4 md:px-20 py-[60px] bg-white text-gray-800">
+            <div className="mb-8 py-[30px]">
+                <span className="text-sm bg-secondary-dark px-3 py-1 rounded-full inline-block mb-1 text-white">
                     We’re hiring!
                 </span>
-                <h1 className="text-4xl font-bold mb-4">Be part of our mission</h1>
-                <p className="text-lg text-gray-600">
+                <h1 className="font-oswald text-2xl lg:text-4xl font-semibold tracking-wide leading-tight mb-4">Be part of our mission</h1>
+                <p className="text-sm lg:text-base font-light font-Poppins text-gray-700 max-w-3xl">
                     We're looking for passionate people to join us on our mission. We value flat hierarchies,
                     clear communication, and full ownership and responsibility.
                 </p>
@@ -73,11 +73,11 @@ const Careers = () => {
         ))}
       </div> */}
 
-            <div className="space-y-6">
+            <div className="space-y-[30px]">
                 {jobListings.map((job, index) => (
                     <div
                         key={index}
-                        className="p-6 border border-gray-200 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center hover:shadow-lg transition"
+                        className="py-6 px-2 border-y border-gray-300 flex flex-col md:flex-row justify-between items-start md:items-center transition"
                     >
                         <div>
                             <h2 className="text-xl font-semibold mb-1">{job.jobTitle}</h2>
@@ -90,9 +90,9 @@ const Careers = () => {
                             </div>
                         </div>
 
-                        <button onClick={() => onClick(job)} className="mt-4 md:mt-0 flex items-center gap-1 text-blue-600 font-medium hover:bg-blue-600 hover:text-white px-4 py-2 rounded transition-all ease-in-out">
+                        <button onClick={() => onClick(job)} className="mt-4 md:mt-0 flex items-center gap-1 text-primary font-medium hover:bg-primary hover:text-white pr-2 pl-4 py-2 rounded-full transition-all ease-in-out">
                             Apply
-                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAABbklEQVR4nO3asWoWQRQG0GuCMegzKOoLWKUVbIXUKURBQbSzECztAkmhIYVFaovUgog+iz6BGoiFon+CR5akEFEyxcrmn3sPbD/zsTsze+dGlFJKKaWUUkqZHs7hKhYj4cSf48CRfTyMLLDl755F77CE7/7tafQMF53sSfQKZ/CpIYRH0SvcbQjgJx5Er7DeGML96BU2G0I4xK3oeD140RjCWnQcwk5DCDOsRo+wgJcNIfzAzegRFrHbEMI33Ige4SxeNYTwFdej46Py64YQvmDlfw3iAu4c79UbEzzbx4veSfZwbezJX8EH8+PjMOYxA3hn/rwZa/LLja/eaTMUVpbHqtTMzJ/ZKAEM8FbWT2CAy3gv6yI4wHncTrkNTu1UHISmkvooLPPPkMy/wzIXRGQviclcFJW5LI57aS9GHH33n9NejeFS9svRpdTX44OhESJtg8QfLTKz31pkHkfiJqmFqcdSSimllFJKKdGrXwe8Dt5fSxhZAAAAAElFTkSuQmCC" className='w-7 h-7 p-1 bg-blue-600 rounded-full -rotate-45' alt="" />
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAABbklEQVR4nO3asWoWQRQG0GuCMegzKOoLWKUVbIXUKURBQbSzECztAkmhIYVFaovUgog+iz6BGoiFon+CR5akEFEyxcrmn3sPbD/zsTsze+dGlFJKKaWUUkqZHs7hKhYj4cSf48CRfTyMLLDl755F77CE7/7tafQMF53sSfQKZ/CpIYRH0SvcbQjgJx5Er7DeGML96BU2G0I4xK3oeD140RjCWnQcwk5DCDOsRo+wgJcNIfzAzegRFrHbEMI33Ige4SxeNYTwFdej46Py64YQvmDlfw3iAu4c79UbEzzbx4veSfZwbezJX8EH8+PjMOYxA3hn/rwZa/LLja/eaTMUVpbHqtTMzJ/ZKAEM8FbWT2CAy3gv6yI4wHncTrkNTu1UHISmkvooLPPPkMy/wzIXRGQviclcFJW5LI57aS9GHH33n9NejeFS9svRpdTX44OhESJtg8QfLTKz31pkHkfiJqmFqcdSSimllFJKKdGrXwe8Dt5fSxhZAAAAAElFTkSuQmCC" className='w-7 h-7 p-1 bg-[#26803d] rounded-full -rotate-45' alt="" />
                         </button>
                     </div>
                 ))}
