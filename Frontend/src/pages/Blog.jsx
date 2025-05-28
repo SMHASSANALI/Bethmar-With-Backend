@@ -10,7 +10,7 @@ const Blog = () => {
     const { getDataFromAPI } = getContext;
 
     const getData = async () => {
-        const data = await getDataFromAPI('blog-posting/get-blog-postings');
+        const data = await getDataFromAPI('blog-posting/get-active-blogs');
         setBlogData(data);
     }
 

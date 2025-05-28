@@ -4,17 +4,26 @@ import { motion } from 'framer-motion';
 import contact from './assets/contact.png';
 import Home from './pages/Home';
 import Blog from './pages/Blog';
-import BlogDetails from './pages/BlogDetails.jsx';
-import Login from './pages/Login.jsx';
+import BlogDetails from './pages/BlogDetails';
+import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import AuthState from './context/Authentication Context/Auth.State';
 import GetState from './context/Custom Get Context/Get.State';
 import PostState from './context/Custom Post Context/Post.State';
-import Navbar from './components/Navbar/Navbar.jsx';
-import Careers from './pages/Careers.jsx';
-import CareersDetails from './pages/CareersDetails.jsx';
-import Footer from './components/Footer/Footer.jsx';
-import ContactForm from './components/ContactForm/ContactForm.jsx';
+import Navbar from './components/Navbar/Navbar';
+import Careers from './pages/Careers';
+import CareersDetails from './pages/CareersDetails';
+import Footer from './components/Footer/Footer';
+import ContactForm from './components/ContactForm/ContactForm';
+import Dashboard from './pages/Dashboard';
+import PostBlog from './pages/PostBlog';
+import PostJob from './pages/PostJob';
+import EditBlog from './pages/EditBlog';
+import EditJob from './pages/EditJob';
+import EditBlogs from './pages/EditBlogs';
+import EditJobs from './pages/EditJobs';
+import PutState from './context/Custom Put Context/Put.State';
+import { ToastContainer } from 'react-toastify';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -35,7 +44,6 @@ function App() {
   const calculatePosition = () => {
     return 'top-[85%]';
   };
-  
   return (
     <>
       <Router>
@@ -51,7 +59,13 @@ function App() {
           <Route exact path="/login" element={<Login />} />
 
           {/* Private Routes */}
-
+          <Route exact path="/admin/dashboard" element={<Dashboard />} />
+          <Route exact path="/admin/post-blog" element={<PostBlog />} />
+          <Route exact path="/admin/post-job" element={<PostJob />} />
+          <Route exact path="/admin/edit-blog" element={<EditBlog />} />
+          <Route exact path="/admin/edit-blog/:id" element={<EditBlogs />} />
+          <Route exact path="/admin/edit-job" element={<EditJob />} />
+          <Route exact path="/admin/edit-job/:id" element={<EditJobs />} />
 
           <Route exact path="/*" element={<NotFound />} />
         </Routes>
@@ -79,7 +93,10 @@ const AppWrapper = () => {
     <AuthState>
       <GetState>
         <PostState>
-          <App />
+          <PutState>
+            <App />
+            <ToastContainer />
+          </PutState>
         </PostState>
       </GetState>
     </AuthState>

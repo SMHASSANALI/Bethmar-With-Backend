@@ -11,6 +11,16 @@ const getAllBlogPostings = async (req, res) => {
     }
 };
 
+const getActiveBlogs = async (req, res) => {
+    try {
+        const blogPostings = await BLOGPOSTING.find({ status: "Active" });
+        return res.status(200).json({ message: "Active blog postings fetched successfully", data: blogPostings });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
+
 const createBlogPosting = async (req, res) => {
     try {
         const reqUser = req.user;
@@ -52,7 +62,7 @@ const updateBlogPosting = async (req, res) => {
         }
 
         const { id } = req.params;
-        const { title, description, image,   category, content, status } = req.body;
+        const { title, description, image, category, content, status } = req.body;
         const blogPosting = await BLOGPOSTING.findById(id);
         if (!blogPosting) {
             return res.status(404).json({ message: "Blog posting not found" });
@@ -64,7 +74,7 @@ const updateBlogPosting = async (req, res) => {
         blogPosting.content = content;
         blogPosting.status = status;
         await blogPosting.save();
-        return res.status(200).json({ message: "Blog posting updated successfully", data: blogPosting });
+        return res.status(200).json({ message: "Blog updated successfully", data: blogPosting });
     } catch (error) {
         console.log(error);
         return res.status(500).json({ message: "Internal server error" });
@@ -95,6 +105,7 @@ const deleteBlogPosting = async (req, res) => {
 
 module.exports = {
     getAllBlogPostings,
+    getActiveBlogs,
     createBlogPosting,
     updateBlogPosting,
     deleteBlogPosting

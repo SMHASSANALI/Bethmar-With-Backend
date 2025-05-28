@@ -11,6 +11,16 @@ const getJobPostings = async (req, res) => {
     }
 }
 
+const getActiveJobPostings = async (req, res) => {
+    try {
+        const jobPostings = await JOBPOSTING.find({ status: "Active" });
+        return res.status(200).json({ message: "Active job postings fetched successfully", data: jobPostings });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
+
 const createJobPosting = async (req, res) => {
     try {
         const reqUser = req.user;
@@ -115,6 +125,7 @@ const deleteJobPosting = async (req, res) => {
 
 module.exports = {
     getJobPostings,
+    getActiveJobPostings,
     createJobPosting,
     updateJobPosting,
     deleteJobPosting

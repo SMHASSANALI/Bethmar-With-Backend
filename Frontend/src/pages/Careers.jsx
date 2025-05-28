@@ -1,50 +1,24 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import GetContext from '../context/Custom Get Context/Get.Context';
 
 const Careers = () => {
     const navigate = useNavigate();
 
-    const jobListings = [
-        {
-            id: '1',
-            jobTitle: 'Product Designer',
-            jobDescription: 'We’re looking for a mid-level product designer to join our team.',
-            requirements: ['3+ years of design experience', 'Proficient in Figma & Adobe XD'],
-            qualifications: ['Bachelor’s degree in Design', 'Strong portfolio'],
-            company: 'Bethmar Technologies',
-            location: '100% Remote',
-            benefits: ['Health insurance', 'Remote work stipend', '401k'],
-            jobType: 'Full-time',
-            status: 'Active',
-            type: 'Full-time'
-        },
-        {
-            id: '2',
-            jobTitle: 'Engineering Manager',
-            jobDescription: "We're looking for an experienced engineering manager to join our team.",
-            requirements: ['3+ years of design experience', 'Proficient in Figma & Adobe XD'],
-            qualifications: ['Bachelor’s degree in Design', 'Strong portfolio'],
-            company: 'Bethmar Technologies',
-            location: '100% Remote',
-            benefits: ['Health insurance', 'Remote work stipend', '401k'],
-            jobType: 'Full-time',
-            status: 'Active',
-            type: 'Full-time'
-        },
-        {
-            id: '3',
-            jobTitle: 'Customer Success Manager',
-            jobDescription: "We're looking for a customer success manager to join our team.",
-            requirements: ['3+ years of design experience', 'Proficient in Figma & Adobe XD'],
-            qualifications: ['Bachelor’s degree in Design', 'Strong portfolio'],
-            company: 'Bethmar Technologies',
-            location: '100% Remote',
-            benefits: ['Health insurance', 'Remote work stipend', '401k'],
-            jobType: 'Full-time',
-            status: 'Active',
-            type: 'Full-time'
-        }
-    ];
+    const context = useContext(GetContext);
+    const { getDataFromAPI } = context;
+
+    const [jobListings, setJobListings] = useState([]);
+
+    const getData = async () => {
+        const data = await getDataFromAPI('job-posting/get-active-jobs');
+        setJobListings(data);
+    }
+
+    useEffect(() => {
+        getData();
+    }, []);
+    
     const onClick = (job) => {
         navigate(`/careers/${job.id}`, { state: job });
     }
@@ -61,17 +35,6 @@ const Careers = () => {
                     clear communication, and full ownership and responsibility.
                 </p>
             </div>
-
-            {/* <div className="flex flex-wrap gap-3 mb-10">
-        {filters.map((filter, index) => (
-          <button
-            key={index}
-            className="px-4 py-2 rounded-full border border-gray-300 hover:bg-gray-100 text-sm"
-          >
-            {filter}
-          </button>
-        ))}
-      </div> */}
 
             <div className="space-y-[30px]">
                 {jobListings.map((job, index) => (

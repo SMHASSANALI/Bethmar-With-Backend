@@ -39,7 +39,7 @@ const register = async (req, res) => {
 };
 const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, isTrue } = req.body;
         if (!email || !password) {
             return res.status(400).json({ message: "All fields are required" });
         }
@@ -47,12 +47,14 @@ const login = async (req, res) => {
         if (!user) {
             return res.status(400).json({ message: "User not found" });
         }
-        const isMatch = await bcrypt.compare(password + PEPPER, user.password);
+        const isMatch = bcrypt.compare(password + PEPPER, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        generateTokenAndSetCookie(user._id, res);
+        if (isTrue) {
+            generateTokenAndSetCookie(user._id, res);
+        }
 
         return res.status(200).json({ message: "User logged in successfully", data: user });
     } catch (error) {

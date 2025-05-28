@@ -9,7 +9,7 @@ const AuthState = (props) => {
 
     const host = import.meta.env.VITE_HOST;
 
-    const login = async (email, password) => {
+    const login = async (email, password, isTrue) => {
         try {
             if (!email || !password) {
                 toast.error("All fields are required");
@@ -22,11 +22,10 @@ const AuthState = (props) => {
                     "Content-Type": "application/json",
                 },
                 credentials: "include",
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password, isTrue }),
             });
-            const { token, user } = await response.json();
-            setUser(user);
-            localStorage.setItem("token", token);
+            const { data } = await response.json();
+            setUser(data);
             setLoading(false);
             toast.success("Login successful");
         } catch (error) {
@@ -50,7 +49,6 @@ const AuthState = (props) => {
             toast.error("Logout failed");
         }
         setUser(null);
-        localStorage.removeItem("token");
         toast.success("Logout successful");
     };
 
