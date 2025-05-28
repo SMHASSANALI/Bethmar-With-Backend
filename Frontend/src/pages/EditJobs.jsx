@@ -44,16 +44,15 @@ const EditJobs = () => {
     });
 
     const handleSave = async () => {
+        // jobTitle, jobDescription, requirements, qualifications, company, location, benefits, jobType, status
         const updatedJob = {
-            jobTitle, jobDescription, jobType, location, benefits, qualifications, requirements, status
+            jobTitle, jobDescription, requirements, qualifications, company, location, benefits, jobType, status
         };
-        console.log("updatedJob", updatedJob);
-        // try {
-        //     await putDataFromAPI(`job-posting/update-job-posting/${state._id}`, updatedJob);
-        //     toast.success("Job updated successfully");
-        // } catch (error) {
-        //     toast.error('Job update failed');
-        // }
+        try {
+            await putDataFromAPI(`job-posting/update-job-posting/${state._id}`, updatedJob);
+        } catch (error) {
+            toast.error('Job update failed');
+        }
     };
 
     const handleListChange = (setter, list, index, value) => {
@@ -67,6 +66,11 @@ const EditJobs = () => {
         if (!value) return;
         setter([...list, value]);
         setNewEntries((prev) => ({ ...prev, [key]: "" }));
+    };
+
+    const handleDeleteEntry = (index, setter, list) => {
+        const updated = list.filter((_, i) => i !== index);
+        setter(updated);
     };
 
     const renderEditableList = (label, items, setter, key) => (
@@ -86,15 +90,23 @@ const EditJobs = () => {
                                 className="w-full border border-gray-300 rounded px-2 py-1 outline-none focus:ring"
                             />
                         ) : (
-                            <>
+                            <div className="flex justify-between w-full items-center">
                                 <span>{item}</span>
-                                <FiEdit2
-                                    className="cursor-pointer text-gray-500"
-                                    onClick={() =>
-                                        setEditIndex((prev) => ({ ...prev, [key]: index }))
-                                    }
-                                />
-                            </>
+                                <div className="flex items-center gap-2">
+                                    <FiEdit2
+                                        className="cursor-pointer text-gray-500"
+                                        onClick={() =>
+                                            setEditIndex((prev) => ({ ...prev, [key]: index }))
+                                        }
+                                    />
+                                    <button
+                                        onClick={() => handleDeleteEntry(index, setter, items)}
+                                        className="text-red-500 hover:text-red-700 text-sm font-bold"
+                                    >
+                                        ✖
+                                    </button>
+                                </div>
+                            </div>
                         )}
                     </li>
                 ))}
@@ -118,6 +130,7 @@ const EditJobs = () => {
             </div>
         </section>
     );
+
 
     return (
         <div className="w-full px-6 py-10 max-w-5xl mx-auto">
