@@ -44,7 +44,6 @@ const EditJobs = () => {
     });
 
     const handleSave = async () => {
-        // jobTitle, jobDescription, requirements, qualifications, company, location, benefits, jobType, status
         const updatedJob = {
             jobTitle, jobDescription, requirements, qualifications, company, location, benefits, jobType, status
         };
