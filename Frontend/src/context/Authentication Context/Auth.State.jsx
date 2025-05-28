@@ -25,6 +25,7 @@ const AuthState = (props) => {
                 body: JSON.stringify({ email, password, isTrue }),
             });
             const { data } = await response.json();
+            localStorage.setItem("user", JSON.stringify(data));
             setUser(data);
             setLoading(false);
             toast.success("Login successful");

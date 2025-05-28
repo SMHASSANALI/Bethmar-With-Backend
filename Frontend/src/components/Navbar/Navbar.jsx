@@ -39,11 +39,13 @@ const Navbar = () => {
       });
     }
   };
+  
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <div className="z-[9999] w-full text-white bg-neutral-900 sticky top-0">
       <section className=" bg-neutral-800">
-        <div className="md:flex justify-start items-center max-w-[1500px] text-xs flex-row  mx-auto py-1">
+        <div className="md:flex justify-between items-center max-w-[1500px] text-xs flex-row  mx-auto py-1">
           <div className="flex items-center gap-4 px-4">
             <a
               href="https://www.facebook.com"
@@ -119,6 +121,23 @@ const Navbar = () => {
                 J Coffey
               </span>
             </a>
+          </div>
+          <div className="h-full">
+            { !user ?
+              <Link
+                to="/login"
+                className="flex items-center justify-center h-full py-1 px-4 bg-green-600 rounded text-base"
+              >
+                Login
+              </Link>
+              :
+              <Link
+                to="/admin/dashboard"
+                className="flex items-center justify-center h-full py-1 px-4 bg-green-600 rounded text-base"
+              >
+                Dashboard
+              </Link>
+            }
           </div>
         </div>
       </section>
