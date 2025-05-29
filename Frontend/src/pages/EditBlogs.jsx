@@ -178,7 +178,7 @@ const EditBlogs = () => {
                 <div className="mt-6">
                     <button
                         onClick={handleSave}
-                        className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                        className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-800 transition duration-300 ease-in-out"
                     >
                         Save Changes
                     </button>

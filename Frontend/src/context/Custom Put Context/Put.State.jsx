@@ -19,6 +19,12 @@ const PutState = (props) => {
                 credentials: 'include',
                 body: JSON.stringify(formData)
             });
+
+            if (response.status === 401) {
+                localStorage.removeItem('user');
+                window.location.href = '/login';
+            }
+
             const data = await response.json();
             if (data.error) {
                 throw new Error(data.error);

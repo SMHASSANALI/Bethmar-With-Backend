@@ -122,7 +122,7 @@ const Navbar = () => {
               </span>
             </a>
           </div>
-          <div className="h-full">
+          {/* <div className="h-full">
             { !user ?
               <Link
                 to="/login"
@@ -138,7 +138,7 @@ const Navbar = () => {
                 Dashboard
               </Link>
             }
-          </div>
+          </div> */}
         </div>
       </section>
 

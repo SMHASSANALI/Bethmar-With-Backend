@@ -75,14 +75,10 @@ const Login = () => {
                                     <input type="checkbox" name="isTrue" onChange={onChange} className="mr-2" />
                                     Remember me
                                 </label>
-                                <a href="#" className="hover:underline">Forgot password</a>
                             </div>
                             <div className="flex gap-3">
                                 <button type='submit' className="bg-green-700 text-white px-5 py-2 rounded-md hover:bg-green-800 transition">
                                     LOGIN
-                                </button>
-                                <button className="border border-gray-300 px-5 py-2 rounded-md hover:bg-gray-100 transition">
-                                    SIGN UP
                                 </button>
                             </div>
                         </form>
@@ -96,9 +92,9 @@ const Login = () => {
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded shadow-md flex items-center justify-center flex-col gap-4 px-8 py-4">
                         <img src={bethmarLogo} className="w-48 bg-black p-2 rounded-xl" alt="logo" />
                         <div className="text-center md:text-left">
-                            <h2 className="text-3xl font-bold text-gray-800 text-center">welcome back</h2>
+                            <h2 className="text-2xl font-bold text-gray-800 text-center">Content Management System</h2>
                             <p className="text-gray-500 mt-1 text-center">
-                                Thank you for getting back, please login to your account by filling this form:
+                                Powered by <a href="https://saskasolutions.com" target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-800 transition">Saska Solutions</a>
                             </p>
                         </div>
                     </div>
