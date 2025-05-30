@@ -20,7 +20,7 @@ const Careers = () => {
     }, []);
     
     const onClick = (job) => {
-        navigate(`/careers/${job.id}`, { state: job });
+        navigate(`/careers/${job._id}`, { state: job });
     }
 
     return (
