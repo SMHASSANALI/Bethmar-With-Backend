@@ -39,7 +39,12 @@ const Navbar = () => {
       });
     }
   };
-  
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   const user = JSON.parse(localStorage.getItem("user"));
 
   return (
@@ -123,7 +128,7 @@ const Navbar = () => {
             </a>
           </div>
           <div className="h-full">
-            { !user ?
+            {!user ?
               <Link
                 to="/login"
                 className="flex items-center justify-center h-full py-1 px-4 bg-green-600 rounded text-base"
@@ -131,12 +136,20 @@ const Navbar = () => {
                 Login
               </Link>
               :
-              <Link
-                to="/admin/dashboard"
-                className="flex items-center justify-center h-full py-1 px-4 bg-green-600 rounded text-base"
-              >
-                Dashboard
-              </Link>
+              <div className="flex items-center gap-2 justify-center h-full">
+                <Link
+                  to="/admin/dashboard"
+                  className="flex items-center justify-center h-full py-1 px-4 bg-green-600 rounded text-base"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center justify-center h-full py-1 px-4 bg-red-600 rounded text-base"
+                >
+                  Logout
+                </button>
+              </div>
             }
           </div>
         </div>
