@@ -47,7 +47,6 @@ const PutState = props => {
       const response = await fetch(`${host}${endpoint}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
         },
         credentials: 'include',

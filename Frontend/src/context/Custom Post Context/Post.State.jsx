@@ -49,7 +49,6 @@ const PostState = props => {
       const response = await fetch(`${host}${endpoint}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
         },
         credentials: 'include',

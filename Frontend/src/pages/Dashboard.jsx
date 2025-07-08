@@ -4,9 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user)
-    const navigate = useNavigate();
     
+    const navigate = useNavigate();
+
     useEffect(() => {
         if (!user) {
             navigate('/login');
