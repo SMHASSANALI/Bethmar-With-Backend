@@ -5,7 +5,7 @@ const cors = require("cors");
 
 const AuthRoute = require("./routes/Authentication.route.js");
 const JobPostingRoute = require("./routes/JobPosting.route.js");
-
+const homePageRoute = require("./routes/HeroSection.route.js");
 const blogPostingRoute = require("./routes/BlogPosting.route.js");
 
 const connectToMongoDB = require("./db/db.js");
@@ -26,6 +26,7 @@ app.use(
 app.use("/api/auth", AuthRoute);
 app.use("/api/job-posting", JobPostingRoute);
 app.use("/api/blog-posting", blogPostingRoute);
+app.use("/api/home-page", homePageRoute);
 
 // app.use("*", (req, res) => {
 //     res.status(404).json({ message: "Route not found" });

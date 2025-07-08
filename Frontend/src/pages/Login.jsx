@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const context = useContext(AuthContext);
     const { login, user } = context;
+    
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({

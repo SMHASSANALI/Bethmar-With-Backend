@@ -21,6 +21,9 @@ const Dashboard = () => {
                 <Link to="/admin/edit-job" className="p-6 bg-white shadow rounded hover:bg-gray-100">
                     🛠️ Edit & Delete Job
                 </Link>
+                <Link to="/admin/edit-home-page" className="p-6 bg-white shadow rounded hover:bg-gray-100">
+                    🛠️ Edit Home Page
+                </Link>
             </div>
         </div>
     );

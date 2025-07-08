@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AuthContext from './Auth.Context'
 import { toast } from 'react-toastify'
 
@@ -8,6 +8,14 @@ const AuthState = (props) => {
     const [loading, setLoading] = useState(true);
 
     const host = import.meta.env.VITE_HOST;
+
+    useEffect(() => {
+        const getUser = JSON.parse(localStorage.getItem("user")) || null;
+        if (getUser) {
+            setUser(getUser);
+        }
+        setLoading(false);
+    }, []);
 
     const login = async (email, password, isTrue) => {
         try {

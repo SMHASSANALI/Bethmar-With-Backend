@@ -24,6 +24,7 @@ import EditBlogs from './pages/EditBlogs';
 import EditJobs from './pages/EditJobs';
 import PutState from './context/Custom Put Context/Put.State';
 import { ToastContainer } from 'react-toastify';
+import EditHomePage from './pages/EditHomePage';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -66,6 +67,7 @@ function App() {
           <Route exact path="/admin/edit-blog/:id" element={<EditBlogs />} />
           <Route exact path="/admin/edit-job" element={<EditJob />} />
           <Route exact path="/admin/edit-job/:id" element={<EditJobs />} />
+          <Route exact path="/admin/edit-home-page" element={<EditHomePage />} />
 
           <Route exact path="/*" element={<NotFound />} />
         </Routes>

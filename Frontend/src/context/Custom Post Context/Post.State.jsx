@@ -42,11 +42,38 @@ const PostState = (props) => {
         }
     };
 
+    const postDataFromAPI2 = async (endpoint, formData) => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${host}${endpoint}`, {
+                method: 'POST',
+                credentials: 'include',
+                body: formData 
+            });
+
+            const data = await response.json();
+
+            if (response.status === 200) {
+                toast.success(data.message);
+                return data?.data;
+            } else {
+                toast.error(data.message);
+                throw new Error('Unexpected API response');
+            }
+        } catch (error) {
+            console.error('API Error:', error.message);
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <PostContext.Provider value={{
             loading,
             error,
-            postDataFromAPI
+            postDataFromAPI,
+            postDataFromAPI2
         }}>
             {children}
         </PostContext.Provider>
