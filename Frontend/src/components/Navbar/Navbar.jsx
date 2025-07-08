@@ -5,10 +5,15 @@ import ContactForm from "../ContactForm/ContactForm";
 import { IoMdClose, IoMdMenu } from "react-icons/io";
 import jCoffey from "../../assets/Logo/JCoffeylogo.jpg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import AuthContext from "../../context/Authentication Context/Auth.Context";
+import { useContext } from "react";
 
 const Navbar = () => {
   const [formVisible, setFormVisible] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const context = useContext(AuthContext);
+  const { setUser } = context;
 
   const handleClick = () => {
     setFormVisible(!formVisible);
@@ -42,6 +47,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    setUser(null);
     navigate("/login");
   };
 

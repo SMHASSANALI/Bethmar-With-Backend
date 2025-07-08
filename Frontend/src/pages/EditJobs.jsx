@@ -44,9 +44,11 @@ const EditJobs = () => {
     });
 
     const handleSave = async () => {
+        console.log("Triggered")
         const updatedJob = {
             jobTitle, jobDescription, requirements, qualifications, company, location, benefits, jobType, status
         };
+        console.log(updatedJob)
         try {
             await putDataFromAPI(`job-posting/update-job-posting/${state._id}`, updatedJob);
         } catch (error) {

@@ -1,8 +1,17 @@
 // src/pages/admin/Dashboard.jsx
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log(user)
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        if (!user) {
+            navigate('/login');
+        }
+    }, [user]);
     return (
         <div className="min-h-screen p-8 bg-gray-50">
             <h1 className="text-3xl font-semibold mb-6">Admin Dashboard</h1>

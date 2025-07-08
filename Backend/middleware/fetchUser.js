@@ -1,30 +1,30 @@
-const jwt = require('jsonwebtoken');
-const User = require('../modals/User.schema.js');
+const jwt = require('jsonwebtoken')
+const User = require('../modals/User.schema.js')
 
 const fetchUser = async (req, res, next) => {
-    const token = req.cookies.jwt;
-    
-    if (!token) {
-        return res.status(401).send('Access Denied');
+  const bearerHeader = req.headers['authorization']
+  const cookieToken = req.cookies.jwt
+  const headerToken = bearerHeader && bearerHeader.split(' ')[1]
+
+  const token = cookieToken || headerToken
+
+  if (!token) {
+    return res.status(401).send('Access Denied: No token provided')
+  }
+
+  try {
+    const verify = jwt.verify(token, process.env.JWT_SECRET)
+    const user = await User.findById(verify.id).select('-password')
+    if (!user) {
+      return res.status(401).send('User Not Found')
     }
 
-    try {
-        const verify = jwt.verify(token, process.env.JWT_SECRET);
-        if (!verify) {
-            return res.status(401).send('Invalid Token');
-        }
+    req.user = user
+    next()
+  } catch (error) {
+    console.error('Token verification error:', error)
+    return res.status(401).send('Invalid Token')
+  }
+}
 
-        const user = await User.findById(verify.id).select('-password');
-        if (!user) {
-            return res.status(401).send('User Not Found');
-        }
-
-        req.user = user;
-        next();
-    } catch (error) {
-        console.error('Token verification error:', error);
-        res.status(401).send('Invalid Token');
-    }
-};
-
-module.exports = fetchUser;
+module.exports = fetchUser

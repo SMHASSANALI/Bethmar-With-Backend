@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 const PutState = props => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const { children } = props
+  const { children, token, setToken } = props
   const host = import.meta.env.VITE_HOST
 
   const putDataFromAPI = async (endpoint, formData) => {
@@ -14,16 +14,18 @@ const PutState = props => {
       const response = await fetch(`${host}${endpoint}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
         credentials: 'include',
         body: JSON.stringify(formData)
       })
 
-      if (response.status === 401) {
-        localStorage.removeItem('user')
-        window.location.href = '/login'
-      }
+      // if (response.status === 401) {
+      //   localStorage.removeItem('user')
+      //   setToken(null)
+      //   window.location.href = '/login'
+      // }
 
       const data = await response.json()
       if (data.error) {
@@ -44,13 +46,18 @@ const PutState = props => {
     try {
       const response = await fetch(`${host}${endpoint}`, {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
+        },
         credentials: 'include',
         body: formData
       })
 
       // if (response.status === 401) {
-      //     localStorage.removeItem('user');
-      //     window.location.href = '/login';
+      //   localStorage.removeItem('user')
+      //   setToken(null)
+      //   window.location.href = '/login'
       // }
 
       const data = await response.json()
