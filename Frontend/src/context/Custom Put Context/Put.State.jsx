@@ -21,11 +21,11 @@ const PutState = props => {
         body: JSON.stringify(formData)
       })
 
-      // if (response.status === 401) {
-      //   localStorage.removeItem('user')
-      //   setToken(null)
-      //   window.location.href = '/login'
-      // }
+      if (response.status === 401) {
+        localStorage.removeItem('user')
+        setToken(null)
+        window.location.href = '/login'
+      }
 
       const data = await response.json()
       if (data.error) {
@@ -53,11 +53,11 @@ const PutState = props => {
         body: formData
       })
 
-      // if (response.status === 401) {
-      //   localStorage.removeItem('user')
-      //   setToken(null)
-      //   window.location.href = '/login'
-      // }
+      if (response.status === 401) {
+        localStorage.removeItem('user')
+        setToken(null)
+        window.location.href = '/login'
+      }
 
       const data = await response.json()
       if (data.error) {

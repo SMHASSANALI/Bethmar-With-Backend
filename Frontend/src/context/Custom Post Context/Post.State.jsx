@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 const PostState = props => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const { children, token } = props
+  const { children, token, setToken } = props
   const host = import.meta.env.VITE_HOST
 
   const postDataFromAPI = async (endpoint, formData) => {
@@ -21,10 +21,11 @@ const PostState = props => {
         body: JSON.stringify(formData)
       })
 
-      // if (response.status === 401) {
-      //     localStorage.removeItem('user');
-      //     window.location.href = '/login';
-      // }
+      if (response.status === 401) {
+        localStorage.removeItem('user')
+        setToken(null)
+        window.location.href = '/login'
+      }
 
       const data = await response.json()
 
