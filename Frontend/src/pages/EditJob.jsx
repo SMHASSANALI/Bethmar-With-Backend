@@ -11,10 +11,10 @@ const EditJob = () => {
 
   const [jobData, setJobData] = useState([]);
   const getData = async () => {
-    setLoading(false);
+    setLoading(true);
     const data = await getDataFromAPI("job-posting/get-job-postings");
     setJobData(data);
-    setLoading(true);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -40,34 +40,58 @@ const EditJob = () => {
                 <th className="py-3 px-4 border">Location</th>
                 <th className="py-3 px-4 border">Company</th>
                 <th className="py-3 px-4 border">Status</th>
+                <th className="py-3 px-4 border">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {jobData.map((job, index) => (
-                <tr
-                  onClick={() => onClick(job)}
-                  key={index}
-                  className="text-sm text-gray-700 hover:bg-gray-50 cursor-pointer"
-                >
-                  <td className="py-3 px-4 border">{index + 1}</td>
-                  <td className="py-3 px-4 border">{job.jobTitle}</td>
-                  <td className="py-3 px-4 border">{job.jobDescription}</td>
-                  <td className="py-3 px-4 border">{job.jobType}</td>
-                  <td className="py-3 px-4 border">{job.location}</td>
-                  <td className="py-3 px-4 border">{job.company}</td>
-                  <td className="py-3 px-4 border">
-                    <span
-                      className={`px-3 py-0.5 rounded-full text-xs font-medium ${
-                        job.status === "Active"
-                          ? "bg-green-100 text-black"
-                          : "bg-yellow-100 text-black"
-                      }`}
-                    >
-                      {job.status}
-                    </span>
+              {loading && (
+                <tr className="w-full">
+                  <td
+                    colSpan={6}
+                    className="py-3 px-4 text-center animate-pulse"
+                  >
+                    <div className="mx-auto animate-spin h-6 w-6 border-2 border-accentGreen border-t-transparent rounded-full" />
                   </td>
                 </tr>
-              ))}
+              )}
+              {!loading && jobData.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-3 px-4 border text-center">
+                    No blog found
+                  </td>
+                </tr>
+              )}
+              {jobData &&
+                jobData.map((job, index) => (
+                  <tr
+                    onClick={() => onClick(job)}
+                    key={index}
+                    className="text-sm text-gray-700 hover:bg-gray-50 cursor-pointer"
+                  >
+                    <td className="py-3 px-4 border">{index + 1}</td>
+                    <td className="py-3 px-4 border">{job.jobTitle}</td>
+                    <td className="py-3 px-4 border">{job.jobDescription}</td>
+                    <td className="py-3 px-4 border">{job.jobType}</td>
+                    <td className="py-3 px-4 border">{job.location}</td>
+                    <td className="py-3 px-4 border">{job.company}</td>
+                    <td className="py-3 px-4 border">
+                      <span
+                        className={`px-3 py-0.5 rounded-full text-xs font-medium ${
+                          job.status === "Active"
+                            ? "bg-green-100 text-black"
+                            : "bg-yellow-100 text-black"
+                        }`}
+                      >
+                        {job.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-4 border">
+                      <button className="inline-block px-4 py-2 rounded-md w-fit text-sm font-medium bg-accentRed text-white">
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
@@ -79,15 +103,10 @@ const EditJob = () => {
               key={index}
               className="border p-4 rounded shadow-sm bg-white"
             >
-              <div className="flex gap-4">
-                <div className="flex flex-col justify-between">
-                  <h2 className="text-lg font-semibold">{job.jobTitle}</h2>
-                  <p className="text-sm text-gray-600">{job.jobDescription}</p>
-                  <p className="text-sm">
-                    <strong>Category:</strong> {job.jobType}
-                  </p>
+              <div className="flex flex-col gap-[10px] justify-between">
+                <div className="flex flex-row items-start justify-between">
                   <span
-                    className={`3t-1 0.5nline-block px-2 py-1 rounded-full w-fit text-xs font-medium ${
+                    className={`inline-block px-3 py-1 rounded-full w-fit text-sm font-medium ${
                       job.status === "Active"
                         ? "bg-green-100 text-black"
                         : "bg-yellow-100 text-black"
@@ -95,7 +114,15 @@ const EditJob = () => {
                   >
                     {job.status}
                   </span>
+                  <button className="inline-block px-4 py-2 rounded-md w-fit text-sm font-medium bg-accentRed text-white">
+                    Delete
+                  </button>
                 </div>
+                <h2 className="text-lg font-semibold">{job.jobTitle}</h2>
+                <p className="text-sm text-gray-600">{job.jobDescription}</p>
+                <p className="text-sm pt-[10px]">
+                  <strong>Category:</strong> {job.jobType}
+                </p>
               </div>
             </div>
           ))}
