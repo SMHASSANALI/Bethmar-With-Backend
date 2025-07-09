@@ -29,7 +29,7 @@ const PostState = props => {
 
       const data = await response.json()
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         toast.success(data.message)
         return data?.data
       } else {
