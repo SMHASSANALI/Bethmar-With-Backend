@@ -1,22 +1,25 @@
-import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import GetContext from "../context/Custom Get Context/Get.Context";
+import React, { useContext, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import GetContext from '../context/Custom Get Context/Get.Context'
 
 const EditJob = () => {
   const navigate = useNavigate();
 
-  const getContext = useContext(GetContext);
-  const { getDataFromAPI } = getContext;
+  const getContext = useContext(GetContext)
+  const { getDataFromAPI } = getContext
+  const [loading, setLoading] = useState(false)
 
-  const [jobData, setJobData] = useState([]);
+  const [jobData, setJobData] = useState([])
   const getData = async () => {
-    const data = await getDataFromAPI("job-posting/get-job-postings");
-    setJobData(data);
-  };
+    setLoading(false)
+    const data = await getDataFromAPI('job-posting/get-job-postings')
+    setJobData(data)
+    setLoading(true)
+  }
 
   useEffect(() => {
-    getData();
-  }, []);
+    getData()
+  }, [])
 
   const onClick = (job) => {
     navigate(`/admin/edit-job/${job._id}`, { state: job });

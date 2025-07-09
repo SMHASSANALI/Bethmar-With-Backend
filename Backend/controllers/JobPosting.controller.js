@@ -35,11 +35,11 @@ const createJobPosting = async (req, res) => {
         if (!jobTitle || !jobDescription || !requirements || !qualifications || !company || !location || !benefits || !jobType) {
             return res.status(400).json({ message: "All fields are required" });
         }
-
+        
         const findJobPosting = await JOBPOSTING.findOne({ jobTitle, jobDescription, requirements, qualifications, company, location, benefits, jobType });
 
         if (findJobPosting) {
-            return res.status(400).json({ message: "Job posting already exists" });
+            return res.status(400).json({ message: "Job already exists" });
         }
 
         const jobPosting = await JOBPOSTING.create({
