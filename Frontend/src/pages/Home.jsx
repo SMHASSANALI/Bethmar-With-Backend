@@ -22,7 +22,6 @@ const Home = () => {
       }
     })()
   }, [])
-  console.log(data)
   return (
     <div className='bg-[#f9f9f9]'>
       <div className='relative'>
