@@ -3,7 +3,7 @@ import AuthContext from './Auth.Context'
 import { toast } from 'react-toastify'
 
 const AuthState = props => {
-  const { children, setToken } = props
+  const { children, setToken, setTrigger } = props
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -34,12 +34,13 @@ const AuthState = props => {
       })
       const data = await response.json()
       if (data.token) setToken(data.token)
+      setTrigger(prev => !prev)
       localStorage.setItem('user', JSON.stringify(data.data))
       setUser(data.data)
       setLoading(false)
       toast.success(data.message)
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast.error('Login failed')
       setLoading(false)
     }
@@ -52,13 +53,14 @@ const AuthState = props => {
         credentials: 'include'
       })
       const { message } = await response.json()
+      setUser(null)
+      setToken(null)
+      setTrigger(prev => !prev)
       toast.success(message)
     } catch (error) {
-      console.log(error)
+      console.error(error)
       toast.error('Logout failed')
     }
-    setUser(null)
-    toast.success('Logout successful')
   }
 
   return (

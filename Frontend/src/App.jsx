@@ -3,7 +3,8 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  useLocation
+  useLocation,
+  Navigate
 } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import contact from './assets/contact.png'
@@ -30,6 +31,7 @@ import EditJobs from './pages/EditJobs'
 import PutState from './context/Custom Put Context/Put.State'
 import { ToastContainer } from 'react-toastify'
 import EditHomePage from './pages/EditHomePage'
+import PrivateRoute from './Route Layout/PrivateRoute'
 
 function ScrollToTop () {
   const { pathname } = useLocation()
@@ -41,7 +43,7 @@ function ScrollToTop () {
   return null
 }
 
-function App () {
+function App ({ isAuthorized }) {
   const [formVisible, setFormVisible] = useState(false)
   const handleClick = () => {
     setFormVisible(!formVisible)
@@ -50,6 +52,7 @@ function App () {
   const calculatePosition = () => {
     return 'top-[85%]'
   }
+
   return (
     <>
       <Router>
@@ -62,20 +65,108 @@ function App () {
           <Route exact path='/blog/:id' element={<BlogDetails />} />
           <Route exact path='/careers' element={<Careers />} />
           <Route exact path='/careers/:id' element={<CareersDetails />} />
-          <Route exact path='/login' element={<Login />} />
-
-          {/* Private Routes */}
-          <Route exact path='/admin/dashboard' element={<Dashboard />} />
-          <Route exact path='/admin/post-blog' element={<PostBlog />} />
-          <Route exact path='/admin/post-job' element={<PostJob />} />
-          <Route exact path='/admin/edit-blog' element={<EditBlog />} />
-          <Route exact path='/admin/edit-blog/:id' element={<EditBlogs />} />
-          <Route exact path='/admin/edit-job' element={<EditJob />} />
-          <Route exact path='/admin/edit-job/:id' element={<EditJobs />} />
           <Route
             exact
+            path='/login'
+            element={<Login isAuthorized={isAuthorized} />}
+          />
+
+          {/* Private Routes */}
+          <Route
+            path='/admin/dashboard'
+            exact
+            element={
+              <PrivateRoute
+                authorizedLink={'/admin/dashboard'}
+                isAuthorized={isAuthorized}
+              >
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/admin/post-blog'
+            exact
+            element={
+              <PrivateRoute
+                authorizedLink={'/admin/post-blog'}
+                isAuthorized={isAuthorized}
+              >
+                <PostBlog />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/admin/post-job'
+            exact
+            element={
+              <PrivateRoute
+                authorizedLink={'/admin/post-job'}
+                isAuthorized={isAuthorized}
+              >
+                <PostJob />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/admin/edit-blog'
+            exact
+            element={
+              <PrivateRoute
+                authorizedLink={'/admin/edit-blog'}
+                isAuthorized={isAuthorized}
+              >
+                <EditBlog />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/admin/edit-blog/:id'
+            exact
+            element={
+              <PrivateRoute
+                authorizedLink={'/admin/edit-blog/:id'}
+                isAuthorized={isAuthorized}
+              >
+                <EditBlogs />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/admin/edit-job'
+            exact
+            element={
+              <PrivateRoute
+                authorizedLink={'/admin/edit-job'}
+                isAuthorized={isAuthorized}
+              >
+                <EditJob />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/admin/edit-job/:id'
+            exact
+            element={
+              <PrivateRoute
+                authorizedLink={'/admin/edit-job/:id'}
+                isAuthorized={isAuthorized}
+              >
+                <EditJobs />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path='/admin/edit-home-page'
-            element={<EditHomePage />}
+            exact
+            element={
+              <PrivateRoute
+                authorizedLink={'/admin/edit-home-page'}
+                isAuthorized={isAuthorized}
+              >
+                <EditHomePage />
+              </PrivateRoute>
+            }
           />
 
           <Route exact path='/*' element={<NotFound />} />
@@ -104,13 +195,42 @@ function App () {
 }
 
 const AppWrapper = () => {
+  const [isAuthorized, setIsAuthorized] = useState(null)
+
   const [token, setToken] = useState(null)
+
+  const [trigger, setTrigger] = useState(false)
+  
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const host = import.meta.env.VITE_HOST
+        const res = await fetch(`${host}auth/check-auth`, {
+          method: 'GET',
+          headers: {
+            'auth-token': token
+          },
+          credentials: 'include'
+        })
+        const data = await res.json()
+        if (res.ok && data?.user) {
+          setIsAuthorized(true)
+        } else {
+          setIsAuthorized(false)
+        }
+      } catch (err) {
+        setIsAuthorized(false)
+      }
+    }
+
+    checkAuth()
+  }, [trigger])
   return (
-    <AuthState setToken={setToken}>
+    <AuthState setToken={setToken} setTrigger={setTrigger}>
       <GetState token={token} setToken={setToken}>
         <PostState token={token} setToken={setToken}>
           <PutState token={token} setToken={setToken}>
-            <App />
+            <App isAuthorized={isAuthorized} />
             <ToastContainer />
           </PutState>
         </PostState>

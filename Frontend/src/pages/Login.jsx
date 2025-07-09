@@ -3,17 +3,17 @@ import bethmarLogo from '../assets/Logo/bethmar.png'
 import AuthContext from '../context/Authentication Context/Auth.Context'
 import { useNavigate } from 'react-router-dom'
 
-const Login = () => {
+const Login = ({ isAuthorized }) => {
   const context = useContext(AuthContext)
-  const { login, user } = context
+  const { login } = context
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (user) {
+    if (isAuthorized) {
       navigate('/admin/dashboard')
     }
-  }, [user])
+  }, [isAuthorized])
 
   const [formData, setFormData] = useState({
     email: '',
@@ -37,7 +37,6 @@ const Login = () => {
   const onSubmit = async e => {
     e.preventDefault()
     await login(formData.email, formData.password, formData.isTrue)
-
     setFormData({
       email: '',
       password: '',

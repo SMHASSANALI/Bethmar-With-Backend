@@ -1,16 +1,21 @@
-const express = require('express');
+const express = require('express')
 const {
-    login,
-    register,
-    resetPassword,
-    logout,
-} = require('../controllers/Auth.controller.js');
+  login,
+  register,
+  resetPassword,
+  logout,
+  checkAuth
+} = require('../controllers/Auth.controller.js')
 
-const router = express.Router();
+const fetchUser = require('../middleware/fetchUser.js')
 
-router.post('/register', register);
-router.post('/login', login);
-router.post('/reset-password', resetPassword);
-router.post('/logout', logout);
+const router = express.Router()
 
-module.exports = router;
+router.post('/register', register)
+router.post('/login', login)
+router.post('/reset-password', resetPassword)
+router.post('/logout', logout)
+
+router.get('/check-auth', checkAuth)
+
+module.exports = router

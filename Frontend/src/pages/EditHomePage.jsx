@@ -3,6 +3,7 @@ import GetContext from '../context/Custom Get Context/Get.Context'
 import PostContext from '../context/Custom Post Context/Post.Context'
 import PutContext from '../context/Custom Put Context/Put.Context'
 import { toast } from 'react-toastify'
+import imageCompression from 'browser-image-compression'
 
 const EditHomePage = () => {
   const { getDataFromAPI } = useContext(GetContext)
@@ -11,7 +12,7 @@ const EditHomePage = () => {
 
   const [heroId, setHeroId] = useState(null)
   const [formData, setFormData] = useState({
-    heroImage: null,
+    heroImage: '',
     heroImagePreview: '',
     description: [''],
     clients: [''],
@@ -26,66 +27,90 @@ const EditHomePage = () => {
   useEffect(() => {
     ;(async () => {
       const data = await getDataFromAPI('home-page/get-home-section')
-      if (data) {
-        setHeroId(data._id)
-        setFormData({
-          heroImage: data.image || null,
-          heroImagePreview: data.image || '',
-          description: data.description || [''],
-          clients: data.clients || [''],
-          services: data.services || {
-            telecom: [''],
-            utility: [''],
-            traffic: ['']
-          },
-          about: (data.about || []).map(item => ({
-            heading: item.heading || '',
-            description: item.description || '',
-            imageUrl: item.imageUrl || '',
-            imagePreview: item.imageUrl || '',
-            SVG: item.SVG || '',
-            svgPreview: item.SVG || ''
-          }))
-        })
-      }
+      if (!data) return
+
+      setHeroId(data._id)
+      setFormData({
+        heroImage: data.image || '',
+        heroImagePreview: data.image || '',
+        description: data.description || [''],
+        clients: data.clients || [''],
+        services: data.services || {
+          telecom: [''],
+          utility: [''],
+          traffic: ['']
+        },
+        about: (data.about || []).map(item => ({
+          heading: item.heading || '',
+          description: item.description || '',
+          imageUrl: item.imageUrl || '',
+          imagePreview: item.imageUrl || '',
+          SVG: item.SVG || '',
+          svgPreview: item.SVG || ''
+        }))
+      })
     })()
   }, [])
 
-  const handleHeroImageChange = e => {
-    const file = e.target.files[0]
-    if (file) {
-      setFormData(prev => ({
-        ...prev,
-        heroImage: file,
-        heroImagePreview: URL.createObjectURL(file)
-      }))
+  const compressImage = async file => {
+    if (!file) return null
+
+    const options = {
+      maxSizeMB: 0.5, // Compress to 0.5 MB
+      maxWidthOrHeight: 1024, // Resize large images
+      useWebWorker: true
+    }
+
+    try {
+      const compressedFile = await imageCompression(file, options)
+      return compressedFile
+    } catch (err) {
+      console.error('❌ Compression Error:', err)
+      return file // fallback to original
     }
   }
 
   const updateAboutField = (index, key, value) => {
     setFormData(prev => {
-      const updated = [...prev.about]
-      updated[index][key] = value
-      return { ...prev, about: updated }
+      const updatedAbout = [...prev.about]
+      updatedAbout[index][key] = value
+      return { ...prev, about: updatedAbout }
     })
   }
 
-  const handleAboutFileChange = (index, key, e) => {
+  const handleHeroImageChange = async e => {
     const file = e.target.files[0]
-    if (file) {
-      const previewKey = key === 'SVG' ? 'svgPreview' : 'imagePreview'
-      updateAboutField(index, key, file)
-      updateAboutField(index, previewKey, URL.createObjectURL(file))
-    }
+    if (!file) return
+    const compressedFile = await compressImage(file)
+
+    setFormData(prev => ({
+      ...prev,
+      heroImage: compressedFile,
+      heroImagePreview: URL.createObjectURL(compressedFile)
+    }))
   }
 
-  const cleanArray = arr => arr.filter(item => item.trim() !== '')
+  const handleAboutFileChange = async (index, key, e) => {
+    const file = e.target.files[0]
+    if (!file) return
+    const compressedFile = await compressImage(file)
+
+    updateAboutField(index, key, compressedFile)
+    updateAboutField(
+      index,
+      key === 'SVG' ? 'svgPreview' : 'imagePreview',
+      URL.createObjectURL(compressedFile)
+    )
+  }
+
+  const cleanArray = arr => arr.filter(item => item?.trim?.() !== '')
 
   const handleSubmit = async () => {
     try {
       const fd = new FormData()
 
       fd.append('description', JSON.stringify(cleanArray(formData.description)))
+      fd.append('clients', JSON.stringify(cleanArray(formData.clients)))
       fd.append(
         'services',
         JSON.stringify({
@@ -94,26 +119,20 @@ const EditHomePage = () => {
           traffic: cleanArray(formData.services.traffic)
         })
       )
-      fd.append('clients', JSON.stringify(cleanArray(formData.clients)))
 
-      fd.append(
-        'about',
-        JSON.stringify(
-          formData.about.map(({ heading, description, imageUrl, SVG }) => ({
-            heading,
-            description,
-            imageUrl: typeof imageUrl === 'string' ? imageUrl : null,
-            SVG: typeof SVG === 'string' ? SVG : null
-          }))
-        )
-      )
+      const aboutList = formData.about.map(item => ({
+        heading: item.heading,
+        description: item.description,
+        imageUrl: item.imagePreview,
+        SVG: item.svgPreview
+      }))
 
-      // only append hero image if it's new (File)
+      fd.append('about', JSON.stringify(aboutList))
+
       if (formData.heroImage && typeof formData.heroImage !== 'string') {
         fd.append('heroImage', formData.heroImage)
       }
 
-      // Append new files only
       formData.about.forEach(item => {
         if (item.imageUrl && typeof item.imageUrl !== 'string') {
           fd.append('aboutImages', item.imageUrl)
@@ -129,8 +148,8 @@ const EditHomePage = () => {
 
       toast[res.success ? 'success' : 'error'](res.message)
     } catch (err) {
-      console.error(err)
-      toast.error('Something went wrong')
+      console.error('❌ Submit Error:', err)
+      toast.error('Something went wrong!')
     }
   }
 

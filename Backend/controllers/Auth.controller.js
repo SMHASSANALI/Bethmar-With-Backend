@@ -1,9 +1,11 @@
 const USER = require('../modals/User.schema.js')
-const generateTokenAndSetCookie = require('../utils/generateToken.js')
 const bcrypt = require('bcrypt')
-const generateTokenForSingleUse = require('../utils/generateTokenForSingleUse.js')
 const SALT_ROUNDS = parseInt(process.env.SALT) || 10
 const PEPPER = process.env.PEPPER || 'default_pepper'
+const jwt = require('jsonwebtoken')
+
+const generateTokenAndSetCookie = require('../utils/generateToken.js')
+const generateTokenForSingleUse = require('../utils/generateTokenForSingleUse.js')
 
 const addSaltAndPepper = async password => {
   const salt = await bcrypt.genSalt(SALT_ROUNDS)
@@ -35,7 +37,7 @@ const register = async (req, res) => {
       .status(201)
       .json({ message: 'User registered successfully', data: newUser })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return res.status(500).json({ message: 'Internal server error' })
   }
 }
@@ -60,14 +62,19 @@ const login = async (req, res) => {
       generateTokenAndSetCookie(user._id, res)
       return res.status(200).json({
         message: 'User logged in successfully',
-        data: user
+        data: user,
+        token: null
       })
     } else {
       const token = generateTokenForSingleUse(user._id)
-      res.json({ message: 'User logged in successfully', data: user, token })
+      return res.status(200).json({
+        message: 'User logged in successfully',
+        data: user,
+        token
+      })
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return res.status(500).json({ message: 'Internal server error' })
   }
 }
@@ -88,16 +95,32 @@ const resetPassword = async (req, res) => {
       .status(200)
       .json({ message: 'Reset link sent successfully', data: user })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return res.status(500).json({ message: 'Internal server error' })
   }
 }
+
+const checkAuth = async (req, res) => {
+  try {
+    const token = req.cookies.jwt || req.headers['auth-token']
+    if (!token) return res.status(401).json({ message: 'Not Authenticated' })
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const user = await USER.findById(decoded.id)
+    if (!user) return res.status(401).json({ message: 'User not found' })
+
+    res.status(200).json({ message: 'Authenticated', user })
+  } catch (err) {
+    return res.status(401).json({ message: 'Token expired or invalid' })
+  }
+}
+
 const logout = (req, res) => {
   try {
     res.clearCookie('jwt')
     return res.status(200).json({ message: 'User logged out successfully' })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return res.status(500).json({ message: 'Internal server error' })
   }
 }
@@ -106,5 +129,6 @@ module.exports = {
   register,
   login,
   resetPassword,
-  logout
+  logout,
+  checkAuth
 }

@@ -98,38 +98,51 @@ const updateHomePage = async (req, res) => {
     body.services = JSON.parse(body.services || '{}')
     const aboutList = JSON.parse(body.about || '[]')
 
+    const isUploaded = url => typeof url === 'string' && url.startsWith('http')
+
     if (files?.heroImage?.[0]) {
+      const heroStart = Date.now()
       body.image = await uploadToCloudinary(files.heroImage[0].path, 'home')
+      console.log(`✅ Hero image uploaded in ${Date.now() - heroStart}ms`)
     }
 
-    const aboutWithFiles = []
-    for (let i = 0; i < aboutList.length; i++) {
-      const current = aboutList[i]
-      const aboutImg = files?.aboutImages?.[i]
-      const aboutSvg = files?.aboutSvgs?.[i]
+    let aboutWithFiles = []
+    if (aboutList.length > 0) {
+      aboutWithFiles = await Promise.all(
+        aboutList.map(async (item, i) => {
+          const aboutImg = files?.aboutImages?.[i]
+          const aboutSvg = files?.aboutSvgs?.[i]
 
-      const imageUrl = aboutImg
-        ? await uploadToCloudinary(aboutImg.path, 'about')
-        : current.imageUrl || '' // ✅ Preserve existing URL if no new file
+          const imageUrl = isUploaded(item.imageUrl)
+            ? item.imageUrl
+            : aboutImg
+            ? await uploadToCloudinary(aboutImg.path, 'about')
+            : ''
 
-      const SVG = aboutSvg
-        ? await uploadToCloudinary(aboutSvg.path, 'about')
-        : current.SVG || '' // ✅ Preserve existing URL if no new file
+          const SVG = isUploaded(item.SVG)
+            ? item.SVG
+            : aboutSvg
+            ? await uploadToCloudinary(aboutSvg.path, 'about')
+            : ''
 
-      aboutWithFiles.push({
-        heading: current.heading || '',
-        description: current.description || '',
-        imageUrl,
-        SVG
-      })
+          return {
+            heading: item.heading || '',
+            description: item.description || '',
+            imageUrl,
+            SVG
+          }
+        })
+      )
     }
+
     const updateFields = {
-      ...(body.description && { description: body.description }),
-      ...(body.clients && { clients: body.clients }),
-      ...(body.services && { services: body.services }),
-      ...(body.image && { image: body.image }),
-      ...(aboutWithFiles.length && { about: aboutWithFiles })
+      description: body.description,
+      clients: body.clients,
+      services: body.services,
+      image: body.image || '',
+      about: aboutWithFiles 
     }
+
     const updated = await HeroSectionModel.findByIdAndUpdate(
       req.params.id,
       updateFields,
@@ -142,6 +155,7 @@ const updateHomePage = async (req, res) => {
       data: updated
     })
   } catch (error) {
+    console.error('❌ Error in updateHomePage:', error)
     return res.status(500).json({
       success: false,
       message: 'Internal Server Error',
