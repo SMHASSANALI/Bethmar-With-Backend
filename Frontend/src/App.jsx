@@ -32,6 +32,7 @@ import PutState from './context/Custom Put Context/Put.State'
 import { ToastContainer } from 'react-toastify'
 import EditHomePage from './pages/EditHomePage'
 import PrivateRoute from './Route Layout/PrivateRoute'
+import DeleteState from './context/Custom Delete Context/Delete.State'
 
 function ScrollToTop () {
   const { pathname } = useLocation()
@@ -200,7 +201,7 @@ const AppWrapper = () => {
   const [token, setToken] = useState(null)
 
   const [trigger, setTrigger] = useState(false)
-  
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -230,8 +231,10 @@ const AppWrapper = () => {
       <GetState token={token} setToken={setToken}>
         <PostState token={token} setToken={setToken}>
           <PutState token={token} setToken={setToken}>
-            <App isAuthorized={isAuthorized} />
-            <ToastContainer />
+            <DeleteState token={token} setToken={setToken}>
+              <App isAuthorized={isAuthorized} />
+              <ToastContainer />
+            </DeleteState>
           </PutState>
         </PostState>
       </GetState>
