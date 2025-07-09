@@ -81,8 +81,8 @@ const Services = ({ services }) => {
                   Telecom Design and Planning
                 </h2>
                 <ul>
-                  {services?.telecom?.map(service => (
-                    <li className='flex flex-row gap-x-2 text-base font-light text-gray-600 items-start py-1'>
+                  {services?.telecom?.map((service, i) => (
+                    <li key={i} className='flex flex-row gap-x-2 text-base font-light text-gray-600 items-start py-1'>
                       {' '}
                       <span className='my-1 text-white'>
                         <TbArrowBadgeRightFilled fill='#ff0000' size={15} />
@@ -160,8 +160,8 @@ const Services = ({ services }) => {
                   Utility Civil Engineering
                 </h2>
                 <ul>
-                  {services?.utility?.map(service => (
-                    <li className='flex flex-row gap-x-2 text-base font-light text-gray-600 items-start py-1'>
+                  {services?.utility?.map((service, i) => (
+                    <li key={i} className='flex flex-row gap-x-2 text-base font-light text-gray-600 items-start py-1'>
                       {' '}
                       <span className='my-1 text-white'>
                         <TbArrowBadgeRightFilled fill='#ff0000' size={15} />
@@ -239,8 +239,8 @@ const Services = ({ services }) => {
                   Traffic Management
                 </h2>
                 <ul>
-                  {services?.traffic?.map(service => (
-                    <li className='flex flex-row gap-x-2 text-base font-light text-gray-600 items-start py-1'>
+                  {services?.traffic?.map((service, i) => (
+                    <li key={i} className='flex flex-row gap-x-2 text-base font-light text-gray-600 items-start py-1'>
                       {' '}
                       <span className='my-1 text-white'>
                         <TbArrowBadgeRightFilled fill='#ff0000' size={15} />
