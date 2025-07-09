@@ -12,7 +12,7 @@ const Blogs = ({
     return (
         <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 max-w-sm mx-auto flex flex-col h-full">
             <div
-                className="relative w-full h-48 cursor-pointer overflow-hidden"
+                className="relative min-w-[340px] w-full h-48 cursor-pointer overflow-hidden"
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
                 onClick={onClick}
