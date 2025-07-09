@@ -104,7 +104,9 @@ const checkAuth = async (req, res) => {
   try {
     const token = req.cookies.jwt || req.headers['auth-token']
     if (!token) return res.status(401).json({ message: 'Not Authenticated' })
-
+    console.log('JWT SECRET', process.env.JWT_SECRET)
+    console.log('Cookie.jwt', req.cookies.jwt)
+    console.log('Auth Token', req.headers['auth-token'])
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     const user = await USER.findById(decoded.id)
     if (!user) return res.status(401).json({ message: 'User not found' })
