@@ -80,7 +80,7 @@ const Login = ({ isAuthorized }) => {
                     type='checkbox'
                     name='isTrue'
                     onChange={onChange}
-                    className='mr-2'
+                    className='mr-2 cursor-pointer'
                   />
                   Remember me
                 </label>

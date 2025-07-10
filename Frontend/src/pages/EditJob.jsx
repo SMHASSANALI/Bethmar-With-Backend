@@ -13,8 +13,12 @@ const EditJob = () => {
   const { deleteDataFromAPI } = deleteContext
 
   const [loading, setLoading] = useState(false)
+  const [deleteId, setDeleteId] = useState(null)
+  const [deleteLoading, setDeleteLoading] = useState(false)
 
   const [jobData, setJobData] = useState([])
+
+
   const getData = async () => {
     setLoading(true)
     const data = await getDataFromAPI('job-posting/get-job-postings')
@@ -28,8 +32,11 @@ const EditJob = () => {
 
   const deleteJob = async jobId => {
     try {
+      setDeleteLoading(true)
       await deleteDataFromAPI(`job-posting/delete-job-posting/${jobId}`)
       getData()
+      setDeleteLoading(false)
+      setDeleteId(null)
     } catch (error) {
       console.error(error)
     }
@@ -133,10 +140,17 @@ const EditJob = () => {
                     </td>
                     <td className='py-3 px-4 border'>
                       <button
-                        onClick={() => deleteJob(job._id)}
-                        className='inline-block px-4 py-2 rounded-md w-fit text-sm font-medium bg-accentRed text-white'
+                        onClick={() => {
+                          setDeleteId(job._id);
+                          deleteJob(job._id);
+                        }}
+                        className="flex items-center justify-center px-4 py-2 rounded-md w-fit text-sm font-medium bg-accentRed text-white"
                       >
-                        Delete
+                        {deleteLoading && job._id === deleteId ? (
+                          <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
+                        ) : (
+                          "Delete"
+                        )}
                       </button>
                     </td>
                   </tr>

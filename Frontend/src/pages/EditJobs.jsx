@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 const EditJobs = () => {
     const { state } = useLocation();
 
-    const { putDataFromAPI } = useContext(PutContext);
+    const { putDataFromAPI, loading } = useContext(PutContext);
 
     const [jobTitle, setJobTitle] = useState(state.jobTitle);
     const [jobDescription, setJobDescription] = useState(state.jobDescription);
@@ -267,7 +267,7 @@ const EditJobs = () => {
                         onClick={handleSave}
                         className="px-6 py-2 bg-green-700 text-white rounded hover:bg-green-800 transition duration-300 ease-in-out"
                     >
-                        Save Changes
+                        {loading ? "Saving..." : "Save Changes"}
                     </button>
                 </div>
             </main>
